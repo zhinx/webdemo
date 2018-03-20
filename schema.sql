@@ -86,7 +86,7 @@ CREATE TABLE cart(
   `buyer_id` INT(11) NOT NULL COMMENT '买家ID',
   `content_id` INT(11) NOT NULL COMMENT '商品ID',
   `num` INT(11) NOT NULL COMMENT '购买数量',
-  PRIMARY KEY (`id`),
+PRIMARY KEY (`id`),
   FOREIGN KEY (`buyer_id`) REFERENCES user(`id`),
   FOREIGN KEY (`content_id`) REFERENCES content(`id`)
 )ENGINE = InnoDB DEFAULT CHARSET = utf8;
