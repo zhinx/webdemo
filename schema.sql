@@ -39,7 +39,7 @@ CREATE TABLE `content` (
   `price` double DEFAULT NULL COMMENT '当前价格',
   `title` varchar(100) DEFAULT NULL COMMENT '标题',
   `summary` varchar(200) DEFAULT NULL COMMENT '摘要',
-  `content` longtext DEFAULT NULL COMMENT '正文',
+  `text` longtext DEFAULT NULL COMMENT '正文',
   `image` varchar(200) DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`),
   FOREIGN KEY (`seller_id`) REFERENCES user(`id`)
