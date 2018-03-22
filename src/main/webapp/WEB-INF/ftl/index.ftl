@@ -24,6 +24,7 @@
     <#else>
     <div class="n-plist">
         <ul class="f-cb" id="plist">
+            <!-- listType 1：未购买列表 -->
         <#if user?? && user.userType == 0 && listType?? && listType == '1'>
             <#list productList as x>
                 <#if !x.isBuy>
