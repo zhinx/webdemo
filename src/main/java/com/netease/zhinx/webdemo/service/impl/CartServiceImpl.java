@@ -69,4 +69,9 @@ public class CartServiceImpl implements CartService {
 
         return cartDAO.addCartContent(cartContent.getBuyerId(), cartContent.getContentId(), cartContent.getNum()) > 0;
     }
+
+    public boolean deleteCartContents(User user) {
+
+        return cartDAO.deleteCartContentsByBuyerId(user.getId()) > 0;
+    }
 }

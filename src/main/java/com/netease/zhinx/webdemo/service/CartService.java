@@ -14,4 +14,6 @@ public interface CartService {
 
     boolean addCartContent(CartContent cartContent);
 
+    boolean deleteCartContents(User user);
+
 }

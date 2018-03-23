@@ -1,10 +1,7 @@
 package com.netease.zhinx.webdemo.dao;
 
 import com.netease.zhinx.webdemo.model.CartContent;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -19,4 +16,7 @@ public interface CartDAO {
 
     @Insert("insert into cart(buyer_id, content_id, num) value(#{buyerId}, #{contentId}, #{num})")
     int addCartContent(@Param("buyerId") int buyerId, @Param("contentId") int contentId, @Param("num") int num);
+
+    @Delete("delete from cart where buyer_id = #{buyerId}")
+    int deleteCartContentsByBuyerId(@Param("buyerId") int buyerId);
 }

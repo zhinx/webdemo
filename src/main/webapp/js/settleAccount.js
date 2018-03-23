@@ -95,7 +95,12 @@
         }).show();
         return;
     };
+    $('clearCart').onclick = function(){
+        // TODO: 清空购物车
+        alert('敬请期待');
+    };
     $('back').onclick = function(){
         window.history.back();
-    }
+    };
+
 })(window,document);

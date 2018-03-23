@@ -10,8 +10,11 @@
     </div>
     <table id="newTable" class="m-table m-table-row n-table g-b3">
     </table>
-    <div id="act-btn"><button class="u-btn u-btn-primary" id="back">退出</button>
-        <button class="u-btn u-btn-primary" id="Account">购买</button></div>
+    <div id="act-btn">
+        <button class="u-btn u-btn-primary" id="back">返回</button>
+        <button class="u-btn u-btn-primary" id="clearCart">清空</button>
+        <button class="u-btn u-btn-primary" id="Account">购买</button>
+    </div>
 </div>
 <#include "./include/footer.ftl">
 <script type="text/javascript" src="/js/global.js"></script>
