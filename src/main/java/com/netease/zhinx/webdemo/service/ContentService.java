@@ -12,6 +12,9 @@ public interface ContentService {
     List<ContentDTO> getAllContents(User user);
 
     /** 返回未购买商品 */
-    List<ContentDTO> getAllUnboughtContents();
+    List<ContentDTO> getAllUnboughtContents(User user);
+
+    /** 返回给定商品信息 */
+    ContentDTO getContentById(User user, int contentId);
 
 }

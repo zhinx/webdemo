@@ -35,11 +35,11 @@ public class LoginController {
     @ResponseBody
     public Map<String, Object> login(HttpServletRequest request, HttpSession session) {
 
-        // 在session中找user信息
-        User userFromSession = (User) session.getAttribute("user");
-
         // 构造返回结果
         Map<String, Object> result = new HashMap<String, Object>();
+
+        // 在session中找user信息
+        User userFromSession = (User) session.getAttribute("user");
 
         // 如果没有session，处理登录
         if (null == userFromSession) {

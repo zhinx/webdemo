@@ -45,7 +45,7 @@
         <h2>详细信息</h2>
     </div>
     <div class="n-detail" style="white-space:pre-wrap">
-       ${product.content}
+       ${product.text}
     </div>
     </#if>
 </div>

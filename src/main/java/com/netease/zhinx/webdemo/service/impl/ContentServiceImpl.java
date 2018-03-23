@@ -5,6 +5,7 @@ import com.netease.zhinx.webdemo.dao.ContentDAO;
 import com.netease.zhinx.webdemo.dao.TransactionDAO;
 import com.netease.zhinx.webdemo.model.Content;
 import com.netease.zhinx.webdemo.model.DTO.ContentDTO;
+import com.netease.zhinx.webdemo.model.Transaction;
 import com.netease.zhinx.webdemo.model.User;
 import com.netease.zhinx.webdemo.service.ContentService;
 import org.apache.logging.log4j.LogManager;
@@ -65,7 +66,7 @@ public class ContentServiceImpl implements ContentService {
             if (null != user) {
                 if (0 == user.getUserType()) {
                     // 用户是买家
-                    logger.debug("ContentService: userType = 0");
+                    logger.debug("ContentService: getAllContents: userType = 0");
                     if (! transactionDAO.getTransactionsByContentIdAndBuyerId(content.getId(), user.getId()).isEmpty()) {
                         // 对应商品存在交易记录
                         contentDTO.setIsBuy(true);
@@ -74,7 +75,7 @@ public class ContentServiceImpl implements ContentService {
                     }
                 } else {
                     // 用户是卖家
-                    logger.debug("ContentService: userType = 1");
+                    logger.debug("ContentService: getAllContents: userType = 1");
                     if (! transactionDAO.getTransactionsByContentId(content.getId()).isEmpty()) {
                         // 对应商品存在交易记录
                         contentDTO.setIsSell(true);
@@ -89,7 +90,52 @@ public class ContentServiceImpl implements ContentService {
         return result;
     }
 
-    public List<ContentDTO> getAllUnboughtContents() {
-        return null;
+    /** 获取对应买家未购买的商品列表 */
+    public List<ContentDTO> getAllUnboughtContents(User user) {
+
+        logger.debug("ContentService: getAllUnboughtContents: userType = 0");
+
+        List<ContentDTO> result = new LinkedList<ContentDTO>();
+
+        if (null != user) {
+
+            List<Content> unboughtContents = contentDAO.getUnboughtContents(user.getId());
+
+            for (Content content :
+                    unboughtContents) {
+                ContentDTO contentDTO = getContentDTO(content);
+                contentDTO.setIsBuy(false);
+
+                result.add(contentDTO);
+            }
+        }
+
+        return result;
+    }
+
+    public ContentDTO getContentById(User user, int contentId) {
+
+        //TODO: content 判空
+        Content content = contentDAO.getContentById(contentId);
+        ContentDTO contentDTO = null;
+
+        if (null != content) {
+            contentDTO = getContentDTO(content);
+            if (null != user) {
+                if (0 == user.getUserType()) {
+                    // 买家的商品详情页，添加是否购买和购买价格
+                    List<Transaction> transactions = transactionDAO.getTransactionsByContentIdAndBuyerId(contentId, user.getUserType());
+                    if (!transactions.isEmpty()) {
+                        // 曾经买过
+                        contentDTO.setIsBuy(true);
+                        contentDTO.setBuyPrice(transactions.get(0).getBuyPrice());
+                    } else {
+                        contentDTO.setIsBuy(false);
+                    }
+                }
+            }
+        }
+
+        return contentDTO;
     }
 }
