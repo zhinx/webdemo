@@ -20,6 +20,10 @@ public interface ContentService {
     /** 新增商品 */
     boolean addContent(Content content);
 
+    /** 编辑商品 */
     boolean updateContent(Content content);
+
+    /** 删除商品 */
+    boolean deleteContent(int contentId);
 
 }

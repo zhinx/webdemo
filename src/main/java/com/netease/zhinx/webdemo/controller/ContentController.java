@@ -11,10 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class ContentController {
@@ -70,6 +76,20 @@ public class ContentController {
         content.setTitle(title);
         content.setSummary(summary);
         content.setText(text);
+
+        // 判断图片路径是否正确，否则使用默认图片
+        int imageSuffixIndex = image.lastIndexOf(".");
+        Set<String> suffixes = new HashSet<String>();
+        suffixes.add("jpg");
+        suffixes.add("jpeg");
+        suffixes.add("gif");
+        suffixes.add("bmp");
+        suffixes.add("png");
+        // 后缀格式不正确
+        if (imageSuffixIndex == -1 || ! suffixes.contains(image.substring(imageSuffixIndex))) {
+            image = "/image/default.jpg";
+        }
+
         content.setImage(image);
 
         if (contentService.addContent(content)) {
@@ -113,14 +133,8 @@ public class ContentController {
             // 删除旧图片文件
             String oldImgString = contentToEdit.getImage();
             if (! oldImgString.equals(image)) {
-                String rootPath = session.getServletContext().getRealPath("");
-                File imgToDelete = new File(rootPath + oldImgString);
-                if (imgToDelete.exists()) {
-                    if (imgToDelete.delete()) {
-                        logger.debug("ContentController: file " + oldImgString + " has been deleted.");
-                    } else {
-                        logger.debug("ContentController: file " + oldImgString + " delete failed.");
-                    }
+                if (! "/image/default.jpg".equals(oldImgString)) {
+                    deleteOldImage(session, oldImgString);
                 }
             }
 
@@ -141,6 +155,49 @@ public class ContentController {
             }
         }
         return "editSubmit";
+    }
+
+    @RequestMapping("/api/delete")
+    @ResponseBody
+    public Map<String, Object> deleteContent(@RequestParam("id") int id, HttpServletResponse response, HttpSession session) {
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        User user = (User) session.getAttribute("user");
+        Content content = contentService.getContentById(user, id);
+        if (null != user && null != content) {
+            if (contentService.deleteContent(id)) {
+                // 不是默认图片才删除
+                if (! "/image/default.jpg".equals(content.getImage())) {
+                    // 删除图片文件
+                    deleteOldImage(session, content.getImage());
+                }
+                response.setStatus(200);
+                result.put("code", 200);
+                result.put("message", "删除成功");
+            } else {
+                response.setStatus(400);
+                result.put("code", 400);
+                result.put("message", "删除失败");
+            }
+
+        }
+        return result;
+    }
+
+    private void deleteOldImage(HttpSession session, String oldImgString) {
+
+        // 删除旧图片文件
+        String rootPath = session.getServletContext().getRealPath("");
+        File imgToDelete = new File(rootPath + oldImgString);
+        if (imgToDelete.exists()) {
+            if (imgToDelete.delete()) {
+                logger.debug("ContentController: file " + oldImgString + " has been deleted.");
+            } else {
+                logger.debug("ContentController: file " + oldImgString + " delete failed.");
+            }
+        }
+
     }
 
 }

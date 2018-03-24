@@ -78,5 +78,9 @@ $('add').onclick = function(e){
     return;
 };
 
+$('back').onclick = function(){
+    window.history.back();
+};
+
 
 

@@ -40,7 +40,7 @@ CREATE TABLE `content` (
   `title` varchar(100) DEFAULT NULL COMMENT '标题',
   `summary` varchar(200) DEFAULT NULL COMMENT '摘要',
   `text` longtext DEFAULT NULL COMMENT '正文',
-  `image` varchar(200) DEFAULT NULL COMMENT '图片',
+  `image` varchar(500) DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`),
   FOREIGN KEY (`seller_id`) REFERENCES user(`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT= 3 DEFAULT CHARSET=utf8;

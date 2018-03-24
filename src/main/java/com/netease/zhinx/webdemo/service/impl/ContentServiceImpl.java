@@ -124,7 +124,7 @@ public class ContentServiceImpl implements ContentService {
             if (null != user) {
                 if (0 == user.getUserType()) {
                     // 买家的商品详情页，添加是否购买和购买价格
-                    List<Transaction> transactions = transactionDAO.getTransactionsByContentIdAndBuyerId(contentId, user.getUserType());
+                    List<Transaction> transactions = transactionDAO.getTransactionsByContentIdAndBuyerId(contentId, user.getId());
                     if (!transactions.isEmpty()) {
                         // 曾经买过
                         contentDTO.setIsBuy(true);
@@ -145,5 +145,10 @@ public class ContentServiceImpl implements ContentService {
 
     public boolean updateContent(Content content) {
         return contentDAO.updateContent(content) > 0;
+    }
+
+    public boolean deleteContent(int contentId) {
+        int result = contentDAO.deleteContent(contentId);
+        return result > 0;
     }
 }

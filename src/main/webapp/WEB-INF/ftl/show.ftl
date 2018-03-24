@@ -29,10 +29,14 @@
             <div class="oprt f-cb">
                 <#if user?? && user.userType==0>
                     <#if product.isBuy>
+                    <button class="u-btn u-btn-primary" id="back">返回</button>
                     <button class="u-btn u-btn-primary" id = "add" data-id="${product.id}" data-title="${product.title}" data-price="${product.price}">加入购物车</button>
                     <span class="buyprice">已购买,当时购买价格：¥${product.buyPrice}</span>
+
                     <#else>
+                    <button class="u-btn u-btn-primary" id="back">返回</button>
                     <button class="u-btn u-btn-primary" id = "add" data-id="${product.id}" data-title="${product.title}" data-price="${product.price}">加入购物车</button>
+
                     </#if>
                 </#if>
                 <#if user?? && user.userType==1>
