@@ -1,6 +1,7 @@
 package com.netease.zhinx.webdemo.dao;
 
 import com.netease.zhinx.webdemo.model.Content;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -20,5 +21,8 @@ public interface ContentDAO {
     // TODO: sql语句再确认一下
     @Select("select * from content where id not in (select content_id from trx where buyer_id = #{buyerId})")
     List<Content> getUnboughtContents(@Param("buyerId") int buyerId);
+
+    @Insert("insert into content(seller_id, price, title, summary, text, image) value(#{sellerId}, #{price}, #{title}, #{summary}, #{text}, #{image})")
+    int addContent(Content content);
 
 }

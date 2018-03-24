@@ -17,4 +17,7 @@ public interface ContentService {
     /** 返回给定商品信息 */
     ContentDTO getContentById(User user, int contentId);
 
+    /** 新增商品 */
+    boolean addContent(Content content);
+
 }

@@ -47,7 +47,7 @@
             <div class="fmitem">
                 <label class="fmlab">正文：</label>
                 <div class="fmipt">
-                    <textarea class="u-ipt" name="content" rows="10" placeholder="2-1000个字符">${product.content}</textarea>
+                    <textarea class="u-ipt" name="text" rows="10" placeholder="2-1000个字符">${product.text}</textarea>
                 </div>
             </div>
             <div class="fmitem">

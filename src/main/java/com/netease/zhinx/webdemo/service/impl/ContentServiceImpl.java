@@ -138,4 +138,8 @@ public class ContentServiceImpl implements ContentService {
 
         return contentDTO;
     }
+
+    public boolean addContent(Content content) {
+        return contentDAO.addContent(content) > 0;
+    }
 }

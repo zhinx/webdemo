@@ -1,18 +1,24 @@
 package com.netease.zhinx.webdemo.controller;
 
 
+import com.netease.zhinx.webdemo.model.Content;
 import com.netease.zhinx.webdemo.model.DTO.ContentDTO;
 import com.netease.zhinx.webdemo.model.User;
 import com.netease.zhinx.webdemo.service.ContentService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class ContentController {
+
+    Logger logger = LogManager.getLogger(ContentController.class.getName());
 
     @Autowired
     ContentService contentService;
@@ -35,6 +41,59 @@ public class ContentController {
         return "show";
     }
 
+    /** 转向商品发布页 */
+    @RequestMapping("/public")
+    public String publicNew(HttpSession session) {
+        User user = (User) session.getAttribute("user");
 
+        if (null == user) {
+            return "redirect:/login";
+        }
+
+        return "public";
+    }
+
+    /** 提交发布信息 */
+    @RequestMapping("/publicSubmit")
+    public String publicSubmit(@RequestParam("title") String title, @RequestParam("summary") String summary, @RequestParam("image") String image,
+                               @RequestParam("text") String text, @RequestParam("price") String price, HttpServletRequest request, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+
+        if (null == user) {
+            return "redirect:/login";
+        }
+        // 构造 Content
+        Content content = new Content();
+        content.setSellerId(user.getId());
+        content.setPrice(Double.valueOf(price));
+        content.setTitle(title);
+        content.setSummary(summary);
+        content.setText(text);
+        content.setImage(image);
+
+        if (contentService.addContent(content)) {
+            logger.debug("ContentController: new product add ok.");
+            request.setAttribute("product", content);
+        }
+
+        return "publicSubmit";
+
+    }
+
+    @RequestMapping("/edit")
+    public String edit(HttpServletRequest request, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+
+        if (null == user) {
+            return "redirect:/login";
+        }
+
+        int contentId = Integer.parseInt(request.getParameter("id"));
+
+        ContentDTO contentDTO = contentService.getContentById(user, contentId);
+        request.setAttribute("product", contentDTO);
+
+        return "edit";
+    }
 
 }
