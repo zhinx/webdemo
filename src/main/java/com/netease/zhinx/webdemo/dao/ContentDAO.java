@@ -4,6 +4,7 @@ import com.netease.zhinx.webdemo.model.Content;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -24,5 +25,8 @@ public interface ContentDAO {
 
     @Insert("insert into content(seller_id, price, title, summary, text, image) value(#{sellerId}, #{price}, #{title}, #{summary}, #{text}, #{image})")
     int addContent(Content content);
+
+    @Update("update content set seller_id = #{sellerId}, price = #{price}, title = #{title}, summary = #{summary}, text = #{text}, image = #{image} where id = #{id}")
+    int updateContent(Content content);
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 
 @Controller
 public class ContentController {
@@ -94,6 +95,52 @@ public class ContentController {
         request.setAttribute("product", contentDTO);
 
         return "edit";
+    }
+
+    /** 提交修改信息 */
+    @RequestMapping("/editSubmit")
+    public String editSubmit(@RequestParam("id") int id, @RequestParam("title") String title, @RequestParam("summary") String summary, @RequestParam("image") String image,
+                             @RequestParam("text") String text, @RequestParam("price") String price, HttpServletRequest request, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+
+        if (null == user) {
+            return "redirect:/login";
+        }
+
+        Content contentToEdit = contentService.getContentById(user, id);
+        if (null != contentToEdit) {
+
+            // 删除旧图片文件
+            String oldImgString = contentToEdit.getImage();
+            if (! oldImgString.equals(image)) {
+                String rootPath = session.getServletContext().getRealPath("");
+                File imgToDelete = new File(rootPath + oldImgString);
+                if (imgToDelete.exists()) {
+                    if (imgToDelete.delete()) {
+                        logger.debug("ContentController: file " + oldImgString + " has been deleted.");
+                    } else {
+                        logger.debug("ContentController: file " + oldImgString + " delete failed.");
+                    }
+                }
+            }
+
+            // 构造 Content
+            Content content = new Content();
+            content.setId(id);
+            content.setSellerId(user.getId());
+            content.setPrice(Double.valueOf(price));
+            content.setTitle(title);
+            content.setSummary(summary);
+            content.setText(text);
+            content.setImage(image);
+
+            if (contentService.updateContent(content)) {
+                logger.debug("ContentController: edit product ok.");
+                request.setAttribute("id", id);
+                request.setAttribute("product", content);
+            }
+        }
+        return "editSubmit";
     }
 
 }

@@ -142,4 +142,8 @@ public class ContentServiceImpl implements ContentService {
     public boolean addContent(Content content) {
         return contentDAO.addContent(content) > 0;
     }
+
+    public boolean updateContent(Content content) {
+        return contentDAO.updateContent(content) > 0;
+    }
 }
