@@ -80,11 +80,11 @@ public class ContentController {
         // 判断图片路径是否正确，否则使用默认图片
         int imageSuffixIndex = image.lastIndexOf(".");
         Set<String> suffixes = new HashSet<String>();
-        suffixes.add("jpg");
-        suffixes.add("jpeg");
-        suffixes.add("gif");
-        suffixes.add("bmp");
-        suffixes.add("png");
+        suffixes.add(".jpg");
+        suffixes.add(".jpeg");
+        suffixes.add(".gif");
+        suffixes.add(".bmp");
+        suffixes.add(".png");
         // 后缀格式不正确
         if (imageSuffixIndex == -1 || ! suffixes.contains(image.substring(imageSuffixIndex))) {
             image = "/image/default.jpg";
