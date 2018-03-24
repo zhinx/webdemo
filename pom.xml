@@ -212,6 +212,6 @@
     </dependencies>
 
     <build>
-        <finalName>webdemo</finalName>
+        <finalName>ROOT</finalName>
     </build>
 </project>
